@@ -45,10 +45,76 @@ if (isset($mybb->input['action'])) {
 		
 	} else if ($mybb->input['action'] == "buy") {
 		//&uid=XXX (view seller listing)
+		if (isset($mybb->input['uid'])) {
+			$uid = $mybb->input['uid']; 
+		} else {
+			$uid = $mybb->user[uid];
+		}
+		$uid = intval(preg_replace("/[^0-9]/", "", $uid));
+			
+		// get the username corresponding to the UID passed to the page
+		$grabuser = $db->simple_select("users", "username", "uid = '" . $uid . "'");
+		$user = $db->fetch_array($grabuser);
+		$username = $user['username'];
+	
+		//get current signature listing from table
+		$query = $db->simple_select("sigsales", "id, status, length, price", "uid = '" . $uid . "'", array("order_by" => "status", "order_dir" => "ASC"));
+		$entries = "";
+			
+		if ($query->num_rows > 0) {
+			// loop through each row in the database that matches our query and create a table row to display it
+			while($row = $db->fetch_array($query)){
+				$status = $row['status'];
+				$id = $row['id'];
+				$price = $row['price'];
+				$length = $row['length'];
+				$template = $templates->get("Omnicoin Address History Entry");
+				eval("\$entries .=\"" . $template . "\";");
+			}
+		} else {
+			$message = "This signature is not currently for sale";
+			$template = $templates->get("BuySigs No Sales");
+			eval("\$entries .=\"" . $template . "\";");
+		}
+		
+		// grab our template
+		$template = $templates->get("Omnicoin Address History");
+		eval("\$page=\"" . $template . "\";");
+		output_page($page);
 	} else if ($mybb->input['action'] == "do_buy") {
-	  //&uid=XXX* (after buy the seller gets a PM to "accept" action the purchase)
+	  	//&uid=XXX* (after buy the seller gets a PM to "accept" action the purchase)
 	} else if ($mybb->input['action'] == "listings") {
-	  //will show all listings of seller with username (format_name+profile link) , posts, reputation on page
+	 	//will show all listings of seller with username (format_name+profile link) , posts, reputation on page
+				
+		//Get all signatures sales with status = 0
+		$query = $db->simple_select("sigsales", "uid, id, price, length", "status=0", array("order_by" => "id", "order_dir" => "ASC"));
+		$entries = "";
+			
+		if ($query->num_rows > 0) {
+			//Loop through each row in the database that matches our query and create a table row to display it
+			while($row = $db->fetch_array($query)){
+				$grabuser = $db->simple_select("users", "username", "uid = '" . $row['uid'] . "'");
+				$user = $db->fetch_array($grabuser);
+					
+				$username = $user['username'];
+				$userid = $row['uid'];
+				$price = $row['address'];
+				$length = $row['date'];
+				$id = $row['id'];
+				$reputation = 0;
+				$posts = 0;
+				$template = $templates->get("BuySigs Listings Entry");
+				eval("\$entries .=\"" . $template . "\";");
+			}
+		} else {
+			$message = "No signatures available";
+			$template = $templates->get("BuySigs Listings No Entry");
+			eval("\$entries .=\"" . $template . "\";");
+		}
+			
+		$template = $templates->get("BuySigs Listings");
+		eval("\$page=\"" . $template . "\";");
+		output_page($page);
 	} else if ($mybb->input['action'] == "accept") {
 	  
 	} else if ($mybb->input['action'] == "do_accept") {
