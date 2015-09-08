@@ -29,11 +29,7 @@ if (!$mybb->user['uid']) {
 if (isset($mybb->input['action'])) {
 	if ($mybb->input['action'] == "sell") {
 	  //sellers can set price per day
-		if (isset($mybb->input['uid'])) {
-			$uid = $mybb->input['uid']; 
-		} else {
-			$uid = $mybb->user[uid];
-		}
+		$uid = $mybb->user[uid];
 		$uid = intval(preg_replace("/[^0-9]/", "", $uid));
 			
 		// get the username corresponding to the UID passed to the page
