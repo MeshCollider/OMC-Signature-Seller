@@ -127,6 +127,31 @@ function buysigs_activate() {
 		"title"		=> "BuySigs No Sales",
 		"template"	=> '<tr class="trow1"><td colspan=2>{$message}</td></tr>',
 		"sid"		=> "-1"));
+		
+		$db->insert_query("templates", array(
+		"tid"		=> NULL,
+		"title"		=> "BuySigs Listings",
+		"template"	=> '<html>
+	<head>
+		<title>Available Signatures</title>
+		{$headerinclude}
+	</head>
+	<body>
+		{$header}
+		<table class="tborder">
+			<tr class="thead">
+				<th><strong>User:</strong></th>
+				<th><strong>Price:</strong></th>
+				<th><strong>Length:</strong></th>
+				<th><strong>Reputation:</strong></th>
+				<th><strong>Posts:</strong></th>
+			</tr>
+			{$entries}
+		</table>
+		{$footer}
+	</body>
+</html>',
+		"sid"		=> "-1"));
 	
 }
 
@@ -138,6 +163,7 @@ function buysigs_deactivate() {
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
 	$db->delete_query("templates", "title LIKE 'BuySigs Default Page'");
 	$db->delete_query("templates", "title LIKE 'BuySigs No Sales'");
+	$db->delete_query("templates", "title LIKE 'BuySigs Listings'");
 }
 
 function buysigs_usercp_do_editsig_start() {
