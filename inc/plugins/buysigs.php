@@ -185,27 +185,3 @@ function buysigs_usercp_do_editsig_start() {
 	
 	global $db, $mybb;
 }
-
-/*
-Database Scheme:
-
-Table Name:sigsales (for the listing of sales)
-Columns:
-id
-uid
-price (in omc of course)
-length (will be sold in days)
-status (0=open listing, 1=sold, 2=expired)
-
-Table Name: sigbuys (for the sales, saving and replacing of sigs)
-Columns:
-id
-uid_seller
-uid_buyer
-oldsig
-newsig
-status (0=active, 1=expired)
-buydate (use unix dateline time)
-expdate (use unix dateline time)
-txnid (omc sales transaction id)
-*/
