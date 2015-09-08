@@ -19,6 +19,9 @@ if (!defined("IN_MYBB")) {
 	die("Direct initialization of this file is not allowed.");
 }
 
+//HOOKS
+$plugins->add_hook("usercp_do_editsig_start", "buysigs_usercp_do_editsig_start");
+
 function buysigs_info() {
 	return array(
 		"name"		=> "Omnicoin Signature Seller",
@@ -102,11 +105,13 @@ function buysigs_deactivate() {
 	//Called whenever a plugin is deactivated. This should essentially "hide" the plugin from view by removing templates/template changes etc. It should not, however, remove any information such as tables, fields etc - that should be handled by an _uninstall routine. When a plugin is uninstalled, this routine will also be called before _uninstall() if the plugin is active.
 }
 
+function buysigs_usercp_do_editsig_start() {
+	//Function to prevent an active status sold signature to be altered.
+	
+	global $db, $mybb;
+}
+
 /*
-Add function to prevent an active status sold signature to be altered.
-
-
-----------------------------
 Database Scheme:
 
 Table Name:sigsales (for the listing of sales)
