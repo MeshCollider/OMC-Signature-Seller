@@ -20,7 +20,7 @@ if (!defined("IN_MYBB")) {
 }
 
 //HOOKS
-$plugins->add_hook("usercp_do_editsig_start", "buysigs_usercp_do_editsig_start");
+$plugins->add_hook("usercp_do_editsig_process", "buysigs_usercp_do_editsig_process");
 
 function buysigs_info() {
 	return array(
@@ -180,7 +180,7 @@ function buysigs_deactivate() {
 	$db->delete_query("templates", "title LIKE 'BuySigs Listings No Entry'");
 }
 
-function buysigs_usercp_do_editsig_start() {
+function buysigs_usercp_do_editsig_process() {
 	//Function to prevent an active status sold signature to be altered.
 	
 	global $db, $mybb;
