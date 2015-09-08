@@ -99,10 +99,38 @@ function buysigs_uninstall() {
 
 function buysigs_activate() {
 	//Called whenever a plugin is activated via the Admin CP. This should essentially make a plugin "visible" by adding templates/template changes, language changes etc.
+	global $db;
+	
+	require_once MYBB_ROOT . '/inc/adminfunctions_templates.php';
+	
+	$db->insert_query("templates", array(
+		"tid"		=> NULL,
+		"title"		=> "BuySigs Default Page",
+		"template"	=> '<html>
+	<head>
+		<title>Omnicoin Signature Seller</title>
+		{$headerinclude}
+	</head>
+	<body>
+		{$header}
+		<h2>Omnicoin</h2>
+		<br />
+		<a href="buysigs.php?action=sell">Sell your signature space</a><br />
+		<a href="buysigs.php?action=listings">Hire a signature space</a><br />
+		{$footer}
+	</body>
+</html>',
+		"sid"		=> "-1"));
+	
 }
 
 function buysigs_deactivate() {
 	//Called whenever a plugin is deactivated. This should essentially "hide" the plugin from view by removing templates/template changes etc. It should not, however, remove any information such as tables, fields etc - that should be handled by an _uninstall routine. When a plugin is uninstalled, this routine will also be called before _uninstall() if the plugin is active.
+
+	global $db;
+	
+	include MYBB_ROOT."/inc/adminfunctions_templates.php";
+	$db->delete_query("templates", "title LIKE 'BuySigs Default Page'");
 }
 
 function buysigs_usercp_do_editsig_start() {
