@@ -18,7 +18,7 @@ require_once "./global.php";
 
 //check if signature seller plugin is enabled
 $enabled_plugins = $cache->read("plugins");
-if (!array_key_exists("signature_seller", $enabled_plugins['active'])) {
+if (!array_key_exists("buysigs", $enabled_plugins['active'])) {
 	die();
 }
 
@@ -42,7 +42,7 @@ if (isset($mybb->input['action'])) {
 		$username = $user['username'];
 		
 		// grab our template
-		$template = $templates->get("Signature Seller Sell");
+		$template = $templates->get("BuySigs Sell");
 		eval("\$page=\"" . $template . "\";");
 		output_page($page);
 	} else if ($mybb->input['action'] == "do_sell") {
@@ -58,12 +58,12 @@ if (isset($mybb->input['action'])) {
 	} else if ($mybb->input['action'] == "do_accept") {
 	  
 	} else {
-		$template = $templates->get("Signature Seller Default Page");
+		$template = $templates->get("BuySigs Default Page");
 		eval("\$page=\"" . $template . "\";");
 		output_page($page);
 	}
 } else {
-	$template = $templates->get("Signature Seller Default Page");
+	$template = $templates->get("BuySigs Default Page");
 	eval("\$page=\"" . $template . "\";");
 	output_page($page);	
 }
