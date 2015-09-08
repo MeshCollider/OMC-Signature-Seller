@@ -19,9 +19,6 @@ if (!defined("IN_MYBB")) {
 	die("Direct initialization of this file is not allowed.");
 }
 
-// Hooks
-$plugins->add_hook("member_profile_start", "buysigs_member_profile_start");
-
 function buysigs_info() {
 	return array(
 		"name"		=> "Omnicoin Signature Seller",
@@ -38,16 +35,63 @@ function buysigs_info() {
 function buysigs_install() {
 	//Called whenever a plugin is installed by clicking the "Install" button in the plugin manager.
 	//It is common to create required tables, fields and settings in this function.	
+	
+	global $mybb, $db, $cache;
+	
+	if (!$db->table_exists("sigsales")) {
+		//for the listing of sales
+		$db->query("CREATE TABLE IF NOT EXISTS `" . TABLE_PREFIX . "sigsales` (
+			`id` smallint(10) unsigned NOT NULL AUTO_INCREMENT,
+			`uid` varchar(10) NOT NULL DEFAULT '',
+			`price` decimal NOT NULL DEFAULT '',
+			`length` smallint NOT NULL,
+			`status` tinyint	NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+	}
+	
+	if (!$db->table_exists("sigbuys")) {
+		//for the sales, saving and replacing of sigs
+		$db->query("CREATE TABLE IF NOT EXISTS `" . TABLE_PREFIX . "sigbuys` (
+			`id` smallint(10) unsigned NOT NULL AUTO_INCREMENT,
+			`uid_seller` varchar(10) NOT NULL DEFAULT '',
+			`uid_buyer` varchar(10) NOT NULL DEFAULT '',
+			`oldsig` varchar(10) NOT NULL DEFAULT '',
+			`newsig` varchar(10) NOT NULL DEFAULT '',
+			`status` tinyint	NOT NULL DEFAULT 0,
+			`buydate` DATETIME NOT NULL,
+			`expdate` DATETIME NOT NULL,
+			`txnid` varchar(64) NOT NULL DEFAULT '',
+			PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+	}
 }
 
 function buysigs_is_installed() {
 	//Called on the plugin management page to establish if a plugin is already installed or not.
 	//This should return TRUE if the plugin is installed (by checking tables, fields etc) or FALSE if the plugin is not installed.
-  	return false;
+  	global $mybb, $db;
+	
+  	if ($db->table_exists("sigsales")) {
+		return true;
+	}
 }
 
 function buysigs_uninstall() {
 	//Called whenever a plugin is to be uninstalled. This should remove ALL traces of the plugin from the installation (tables etc). If it does not exist, uninstall button is not shown.
+
+	global $mybb, $db;
+	//Delete the sigsales table
+	if ($db->table_exists("sigsales")) {
+		//delete the table here
+		$db->query("DROP TABLE IF EXISTS `" . TABLE_PREFIX . "sigsales`");
+	}
+	//Delete the sigbuys table
+	if ($db->table_exists("sigbuys")) {
+		//delete the table here
+		$db->query("DROP TABLE IF EXISTS `" . TABLE_PREFIX . "sigbuys`");
+	}
+	
 }
 
 function buysigs_activate() {
