@@ -122,13 +122,13 @@ function buysigs_activate() {
 </html>',
 		"sid"		=> "-1"));
 		
-		$db->insert_query("templates", array(
+	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs No Sales",
 		"template"	=> '<tr class="trow1"><td colspan=2>{$message}</td></tr>',
 		"sid"		=> "-1"));
 		
-		$db->insert_query("templates", array(
+	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs Listings",
 		"template"	=> '<html>
@@ -153,13 +153,13 @@ function buysigs_activate() {
 </html>',
 		"sid"		=> "-1"));
 		
-		$db->insert_query("templates", array(
+	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs Listings Entry",
 		"template"	=> '<tr class="trow1"><td><a href="member.php?action=profile&uid={$userid}">{$username}</td><td><a target="_blank" href="https://omnicha.in?address={$address}">{$address}</a></td><td>{$date}</td></tr>',
 		"sid"		=> "-1"));
 		
-		$db->insert_query("templates", array(
+	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs Listings No Entry",
 		"template"	=> '<tr class="trow1"><td colspan=3>{$message}</td></tr>',
