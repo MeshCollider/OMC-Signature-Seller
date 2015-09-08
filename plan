@@ -1,0 +1,57 @@
+
+meshcollider [12:03 PM]12:03
+This is what I have so far. It's rough but it's on the right track. Normally once I begin coding things come together better. The only thing I haven't done is figured out the OMC IPN part. So that once a payment is made on an approved sale the IPN will kick in.
+
+
+Plugin for OMC based Signature Purchases
+----------------------------------------------
+
+The IPN function I have not yet figured out the best way to automate.
+
+---------------------
+/buysigs.php (page for buying and selling of sigs)
+
+actions: 
+buysigs.php?action=sell (sellers can set price per day)
+buysigs.php?action=do_sell
+buysigs.php?action=buy&uid=XXX (view seller listing)
+buysigs.php?action=do_buy&uid=XXX* (after buy the seller gets a PM to "accept" action the purchase)
+buysigs.php?action=listings (will show all listings of seller with username (format_name+profile link) , posts, reputation on page)
+buysigs.php?action=accept 
+buysigs.php?action=do_accept
+
+Make sure all post data is verified and that signatures are cleaned. Use standard Mybb functions please.
+
+
+-------------------------
+/inc/tasks/buysigs.php (Task to check the expired date of sold sigs and replace them to original sig)
+
+-----------------------------
+/inc/plugins/buysigs.php
+
+Plugin file will insert database tables required.
+Add function to prevent an active status sold signature to be altered.
+
+
+----------------------------
+Database Scheme:
+
+Table Name:sigsales (for the listing of sales)
+Columns:
+id
+uid
+price (in omc of course)
+length (will be sold in days)
+status (0=open listing, 1=sold, 2=expired)
+
+Table Name: sigbuys (for the sales, saving and replacing of sigs)
+Columns:
+id
+uid_seller
+uid_buyer
+oldsig
+newsig
+status (0=active, 1=expired)
+buydate (use unix dateline time)
+expdate (use unix dateline time)
+txnid (omc sales transaction id)
