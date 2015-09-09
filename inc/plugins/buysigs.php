@@ -200,6 +200,38 @@ function buysigs_activate() {
 		"title"		=> "BuySigs Listings No Entry",
 		"template"	=> '<tr class="trow1"><td colspan=5>{$message}</td></tr>',
 		"sid"		=> "-1"));
+		
+	$db->insert_query("templates", array(
+		"tid"		=> NULL,
+		"title"		=> "BuySigs Sell",
+		"template"	=> '<html>
+	<head>
+		<title>Omnicoin Signature Seller</title>
+		{$headerinclude}
+	</head>
+	<body>
+		{$header}
+		<h2>Sell your signature space</h2>
+		<form method="post" action="buysigs.php?action=do_sell">
+			<table cellspacing="0" cellpadding="5">
+				<tr>
+					<td colspan=2>{$alert}</td>
+				</tr>
+				<tr>
+					<td>Price:</td><td><input type="text" class="textbox" size="40" name="sell_price" /></td>
+				</tr>
+				<tr>
+					<td>Length:</td><td><input type="text" class="textbox" size="40" name="sell_length" /></td>
+				</tr>
+				<tr>
+					<td><input class="button" type="submit" value="Sell signature" /></td>
+				</tr>
+			</table>
+		</form>
+		{$footer}
+	</body>
+</html>',
+		"sid"		=> "-1"));
 	
 }
 
@@ -215,6 +247,7 @@ function buysigs_deactivate() {
 	$db->delete_query("templates", "title LIKE 'BuySigs Listings'");
 	$db->delete_query("templates", "title LIKE 'BuySigs Listings Entry'");
 	$db->delete_query("templates", "title LIKE 'BuySigs Listings No Entry'");
+	$db->delete_query("templates", "title LIKE 'BuySigs Sell'");
 }
 
 function buysigs_usercp_do_editsig_process() {
