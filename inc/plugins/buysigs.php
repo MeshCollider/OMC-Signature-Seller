@@ -113,10 +113,34 @@ function buysigs_activate() {
 	</head>
 	<body>
 		{$header}
-		<h2>Omnicoin</h2>
+		<h2>Options:</h2>
 		<br />
 		<a href="buysigs.php?action=sell">Sell your signature space</a><br />
 		<a href="buysigs.php?action=listings">Hire a signature space</a><br />
+		{$footer}
+	</body>
+</html>',
+		"sid"		=> "-1"));
+	
+	$db->insert_query("templates", array(
+		"tid"		=> NULL,
+		"title"		=> "BuySigs Signature",
+		"template"	=> '<html>
+	<head>
+		<title>Purchase a Signature Space</title>
+		{$headerinclude}
+	</head>
+	<body>
+		{$header}
+		<h2>Signature space for: {$username}</h2>
+		<br />
+		Length of time (days): {$length}
+		Price (OMC): {$price}
+		Reputation: <a target="_blank" href="https://reputaion.php?uid={$userid}"><font color="{$repcolor}">{$reputation}</font></a>
+		Number of posts: {$posts}
+		Posts per Day: {postsperday}
+		<br />
+		<input type="submit">Purchase this space</input>
 		{$footer}
 	</body>
 </html>',
@@ -125,7 +149,19 @@ function buysigs_activate() {
 	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs No Sales",
-		"template"	=> '<tr class="trow1"><td colspan=2>{$message}</td></tr>',
+		"template"	=> '<html>
+	<head>
+		<title>This signature space is not for sale</title>
+		{$headerinclude}
+	</head>
+	<body>
+		{$header}
+		<h2>This signature space is not currently. for sale</h2>
+		<a target="_blank" href="https://reputaion.php?uid={$userid}"><font color="{$repcolor}">{$reputation}</font></a>
+		<a href="buysigs.php?action=listings">Click here to view available signature listings</a>
+		{$footer}
+	</body>
+</html>',
 		"sid"		=> "-1"));
 		
 	$db->insert_query("templates", array(
@@ -142,7 +178,7 @@ function buysigs_activate() {
 			<tr class="thead">
 				<th><strong>User:</strong></th>
 				<th><strong>Price:</strong></th>
-				<th><strong>Length:</strong></th>
+				<th><strong>Length (days):</strong></th>
 				<th><strong>Reputation:</strong></th>
 				<th><strong>Posts:</strong></th>
 			</tr>
@@ -156,13 +192,13 @@ function buysigs_activate() {
 	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs Listings Entry",
-		"template"	=> '<tr class="trow1"><td><a href="member.php?action=profile&uid={$userid}">{$username}</td><td><a target="_blank" href="https://omnicha.in?address={$address}">{$address}</a></td><td>{$date}</td></tr>',
+		"template"	=> '<tr class="trow1"><td><a href="member.php?action=profile&uid={$userid}">{$username}</td><td>{$price}</td><td>{$length}</td><td><a target="_blank" href="https://reputaion.php?uid={$userid}"><font color="{$repcolor}">{$reputation}</font></a></td><td>{$posts}</td></tr>',
 		"sid"		=> "-1"));
 		
 	$db->insert_query("templates", array(
 		"tid"		=> NULL,
 		"title"		=> "BuySigs Listings No Entry",
-		"template"	=> '<tr class="trow1"><td colspan=3>{$message}</td></tr>',
+		"template"	=> '<tr class="trow1"><td colspan=5>{$message}</td></tr>',
 		"sid"		=> "-1"));
 	
 }
@@ -174,6 +210,7 @@ function buysigs_deactivate() {
 	
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
 	$db->delete_query("templates", "title LIKE 'BuySigs Default Page'");
+	$db->delete_query("templates", "title LIKE 'BuySigs Signature'");
 	$db->delete_query("templates", "title LIKE 'BuySigs No Sales'");
 	$db->delete_query("templates", "title LIKE 'BuySigs Listings'");
 	$db->delete_query("templates", "title LIKE 'BuySigs Listings Entry'");
