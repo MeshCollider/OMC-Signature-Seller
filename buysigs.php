@@ -65,20 +65,26 @@ if (isset($mybb->input['action'])) {
 			// loop through each row in the database that matches our query and create a table row to display it
 			while($row = $db->fetch_array($query)){
 				$status = $row['status'];
+				if($status != 0) continue;
+				
+				$userid = $uid;
 				$id = $row['id'];
 				$price = $row['price'];
 				$length = $row['length'];
-				$template = $templates->get("Omnicoin Address History Entry");
-				eval("\$entries .=\"" . $template . "\";");
+				$reputation = 0;
+				$repcolor = "green";
+				$posts = 0;
+				$template = $templates->get("BuySigs Signature");
+				eval("\$page=\"" . $template . "\";");
 			}
 		} else {
-			$message = "This signature is not currently for sale";
+			//signature is not for sale
 			$template = $templates->get("BuySigs No Sales");
 			eval("\$entries .=\"" . $template . "\";");
 		}
 		
 		// grab our template
-		$template = $templates->get("Omnicoin Address History");
+		$template = $templates->get("BuySigs Signature");
 		eval("\$page=\"" . $template . "\";");
 		output_page($page);
 	} else if ($mybb->input['action'] == "do_buy") {
@@ -102,6 +108,7 @@ if (isset($mybb->input['action'])) {
 				$length = $row['date'];
 				$id = $row['id'];
 				$reputation = 0;
+				$repcolor = "green";
 				$posts = 0;
 				$template = $templates->get("BuySigs Listings Entry");
 				eval("\$entries .=\"" . $template . "\";");
